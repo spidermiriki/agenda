@@ -4,6 +4,7 @@ import YearView from './components/YearView';
 import MonthView from './components/MonthView';
 import DayDetail from './components/DayDetail';
 import GardenBackground from './components/GardenBackground';
+import IntroOverlay from './components/IntroOverlay';
 import { START_YEAR, shiftMonth } from './dateUtils';
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
     <div className="App">
       <GardenBackground />
       {content}
+      <IntroOverlay />
     </div>
   );
 }
