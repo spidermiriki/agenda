@@ -12,6 +12,7 @@ function formatSchedule(schedule) {
 function DayDetail({ date, onBack }) {
   const dateKey = formatDateKey(date);
   const [events, setEvents] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
   const [title, setTitle] = useState('');
   const [assignedTo, setAssignedTo] = useState(ASSIGNEES[0].id);
@@ -27,6 +28,7 @@ function DayDetail({ date, onBack }) {
   }, [dateKey]);
 
   function resetForm() {
+    setEditingId(null);
     setTitle('');
     setAssignedTo(ASSIGNEES[0].id);
     setScheduleType('indefini');
@@ -36,7 +38,26 @@ function DayDetail({ date, onBack }) {
     setSingleTime('');
   }
 
-  function addEvent() {
+  function startEdit(event) {
+    setEditingId(event.id);
+    setTitle(event.title);
+    setAssignedTo(event.assignedTo);
+    const schedule = event.schedule || { type: 'indefini' };
+    setScheduleType(schedule.type);
+    if (schedule.type === 'defini') {
+      setScheduleMode(schedule.mode);
+      setStartTime(schedule.mode === 'range' ? schedule.start || '' : '');
+      setEndTime(schedule.mode === 'range' ? schedule.end || '' : '');
+      setSingleTime(schedule.mode === 'single' ? schedule.start || '' : '');
+    } else {
+      setScheduleMode('range');
+      setStartTime('');
+      setEndTime('');
+      setSingleTime('');
+    }
+  }
+
+  function saveEvent() {
     const text = title.trim();
     if (!text) return;
 
@@ -47,14 +68,21 @@ function DayDetail({ date, onBack }) {
         : { type: 'defini', mode: 'single', start: singleTime };
     }
 
-    const newEvent = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      title: text,
-      assignedTo,
-      schedule,
-    };
+    let updated;
+    if (editingId) {
+      updated = events.map((event) =>
+        event.id === editingId ? { ...event, title: text, assignedTo, schedule } : event
+      );
+    } else {
+      const newEvent = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        title: text,
+        assignedTo,
+        schedule,
+      };
+      updated = [...events, newEvent];
+    }
 
-    const updated = [...events, newEvent];
     setEvents(updated);
     saveDayData(dateKey, { events: updated });
     resetForm();
@@ -64,6 +92,7 @@ function DayDetail({ date, onBack }) {
     const updated = events.filter((event) => event.id !== id);
     setEvents(updated);
     saveDayData(dateKey, { events: updated });
+    if (editingId === id) resetForm();
   }
 
   return (
@@ -78,12 +107,17 @@ function DayDetail({ date, onBack }) {
               <strong>{event.title}</strong>
               <span className="event-meta">{assigneeLabel(event.assignedTo)} — {formatSchedule(event.schedule)}</span>
             </div>
-            <button className="btn btn-remove" onClick={() => removeEvent(event.id)}>Supprimer</button>
+            <div className="event-actions">
+              <button className="btn btn-edit" onClick={() => startEdit(event)}>Modifier</button>
+              <button className="btn btn-remove" onClick={() => removeEvent(event.id)}>Supprimer</button>
+            </div>
           </li>
         ))}
       </ul>
 
       <div className="event-form">
+        {editingId && <span className="field-label">Modification de l'événement</span>}
+
         <input
           type="text"
           value={title}
@@ -161,7 +195,14 @@ function DayDetail({ date, onBack }) {
           </div>
         )}
 
-        <button className="btn btn-add" onClick={addEvent}>Ajouter l'événement</button>
+        <div className="field-group">
+          <button className="btn btn-add" onClick={saveEvent}>
+            {editingId ? 'Enregistrer les modifications' : "Ajouter l'événement"}
+          </button>
+          {editingId && (
+            <button className="btn btn-nav" onClick={resetForm}>Annuler</button>
+          )}
+        </div>
       </div>
     </div>
   );

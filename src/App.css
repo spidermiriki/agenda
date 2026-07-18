@@ -387,6 +387,18 @@
   gap: 2px;
 }
 
+.event-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.btn-edit {
+  font-size: 0.85rem;
+  padding: 4px 8px;
+}
+
 .event-meta {
   font-size: 0.85rem;
   color: var(--pencil-soft);
