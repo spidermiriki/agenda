@@ -1,0 +1,30 @@
+:root {
+  --paper: #fbf9f2;
+  --paper-alt: #f4f1e6;
+  --paper-line: #d7e4f0;
+  --pencil: #3f3f3f;
+  --pencil-soft: #6f6f6f;
+  --red-pencil: #c0554d;
+  --purple: #8e44ad;
+  --green: #27ae60;
+}
+
+body {
+  margin: 0;
+  font-family: 'Patrick Hand', cursive;
+  color: var(--pencil);
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 31px,
+    var(--paper-line) 32px
+  );
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
