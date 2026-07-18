@@ -1,10 +1,23 @@
-import { MONTH_NAMES, DAY_NAMES, getMonthWeeks, formatDateKey, shiftMonth, isBeforeStart } from '../dateUtils';
-import { getDayData } from '../storage';
+import { useEffect, useState } from 'react';
+import {
+  MONTH_NAMES,
+  DAY_NAMES,
+  getMonthWeeks,
+  formatDateKey,
+  shiftMonth,
+  isBeforeStart,
+  monthRangeKeys,
+} from '../dateUtils';
+import { subscribeToMonth } from '../storage';
 import { assigneeColor } from '../assignees';
 
-function getDayAssignees(day) {
-  const { events } = getDayData(formatDateKey(day));
-  return [...new Set(events.map((event) => event.assignedTo))];
+function buildAssigneesByDay(events) {
+  const map = {};
+  events.forEach((event) => {
+    if (!map[event.date]) map[event.date] = new Set();
+    map[event.date].add(event.assignedTo);
+  });
+  return map;
 }
 
 function MonthView({ year, month, onBack, onSelectDay, onPrevMonth, onNextMonth }) {
@@ -12,6 +25,16 @@ function MonthView({ year, month, onBack, onSelectDay, onPrevMonth, onNextMonth 
   const today = formatDateKey(new Date());
   const prevTarget = shiftMonth(year, month, -1);
   const disablePrev = isBeforeStart(prevTarget.year, prevTarget.month);
+
+  const [monthEvents, setMonthEvents] = useState([]);
+
+  useEffect(() => {
+    const { start, end } = monthRangeKeys(year, month);
+    const unsubscribe = subscribeToMonth(start, end, setMonthEvents);
+    return unsubscribe;
+  }, [year, month]);
+
+  const assigneesByDay = buildAssigneesByDay(monthEvents);
 
   return (
     <div className="page month-page">
@@ -38,7 +61,7 @@ function MonthView({ year, month, onBack, onSelectDay, onPrevMonth, onNextMonth 
               }
               const key = formatDateKey(day);
               const isToday = key === today;
-              const assignees = getDayAssignees(day);
+              const assignees = [...(assigneesByDay[key] || [])];
               return (
                 <div key={`${weekIndex}-${dayIndex}`} className="calendar-cell">
                   <button

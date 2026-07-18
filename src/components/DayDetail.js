@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { formatDateKey } from '../dateUtils';
-import { getDayData, saveDayData } from '../storage';
+import { addEvent, deleteEvent, subscribeToDay, updateEvent } from '../storage';
 import { ASSIGNEES, assigneeLabel } from '../assignees';
 
 function formatSchedule(schedule) {
@@ -23,8 +23,8 @@ function DayDetail({ date, onBack }) {
   const [singleTime, setSingleTime] = useState('');
 
   useEffect(() => {
-    const data = getDayData(dateKey);
-    setEvents(data.events);
+    const unsubscribe = subscribeToDay(dateKey, setEvents);
+    return unsubscribe;
   }, [dateKey]);
 
   function resetForm() {
@@ -57,7 +57,7 @@ function DayDetail({ date, onBack }) {
     }
   }
 
-  function saveEvent() {
+  async function saveEvent() {
     const text = title.trim();
     if (!text) return;
 
@@ -68,30 +68,17 @@ function DayDetail({ date, onBack }) {
         : { type: 'defini', mode: 'single', start: singleTime };
     }
 
-    let updated;
     if (editingId) {
-      updated = events.map((event) =>
-        event.id === editingId ? { ...event, title: text, assignedTo, schedule } : event
-      );
+      await updateEvent(editingId, { title: text, assignedTo, schedule });
     } else {
-      const newEvent = {
-        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-        title: text,
-        assignedTo,
-        schedule,
-      };
-      updated = [...events, newEvent];
+      await addEvent(dateKey, { title: text, assignedTo, schedule });
     }
 
-    setEvents(updated);
-    saveDayData(dateKey, { events: updated });
     resetForm();
   }
 
-  function removeEvent(id) {
-    const updated = events.filter((event) => event.id !== id);
-    setEvents(updated);
-    saveDayData(dateKey, { events: updated });
+  async function removeEvent(id) {
+    await deleteEvent(id);
     if (editingId === id) resetForm();
   }
 

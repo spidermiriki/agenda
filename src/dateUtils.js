@@ -49,3 +49,10 @@ export function shiftMonth(year, month, delta) {
   const total = year * 12 + month + delta;
   return { year: Math.floor(total / 12), month: ((total % 12) + 12) % 12 };
 }
+
+export function monthRangeKeys(year, month) {
+  return {
+    start: formatDateKey(new Date(year, month, 1)),
+    end: formatDateKey(new Date(year, month + 1, 0)),
+  };
+}
