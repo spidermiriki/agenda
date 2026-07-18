@@ -3,6 +3,7 @@ import './App.css';
 import YearView from './components/YearView';
 import MonthView from './components/MonthView';
 import DayDetail from './components/DayDetail';
+import GardenBackground from './components/GardenBackground';
 import { START_YEAR, shiftMonth } from './dateUtils';
 
 function App() {
@@ -10,42 +11,40 @@ function App() {
   const [selectedMonth, setSelectedMonth] = useState(null); // 0-11 ou null
   const [selectedDay, setSelectedDay] = useState(null); // Date ou null
 
+  function goToMonth(delta) {
+    const shifted = shiftMonth(year, selectedMonth, delta);
+    setYear(shifted.year);
+    setSelectedMonth(shifted.month);
+  }
+
+  let content;
   if (selectedDay) {
-    return (
-      <div className="App">
-        <DayDetail date={selectedDay} onBack={() => setSelectedDay(null)} />
-      </div>
+    content = <DayDetail date={selectedDay} onBack={() => setSelectedDay(null)} />;
+  } else if (selectedMonth !== null) {
+    content = (
+      <MonthView
+        year={year}
+        month={selectedMonth}
+        onBack={() => setSelectedMonth(null)}
+        onSelectDay={(day) => setSelectedDay(day)}
+        onPrevMonth={() => goToMonth(-1)}
+        onNextMonth={() => goToMonth(1)}
+      />
     );
-  }
-
-  if (selectedMonth !== null) {
-    const goToMonth = (delta) => {
-      const shifted = shiftMonth(year, selectedMonth, delta);
-      setYear(shifted.year);
-      setSelectedMonth(shifted.month);
-    };
-
-    return (
-      <div className="App">
-        <MonthView
-          year={year}
-          month={selectedMonth}
-          onBack={() => setSelectedMonth(null)}
-          onSelectDay={(day) => setSelectedDay(day)}
-          onPrevMonth={() => goToMonth(-1)}
-          onNextMonth={() => goToMonth(1)}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className="App">
+  } else {
+    content = (
       <YearView
         year={year}
         onChangeYear={(delta) => setYear((y) => y + delta)}
         onSelectMonth={(month) => setSelectedMonth(month)}
       />
+    );
+  }
+
+  return (
+    <div className="App">
+      <GardenBackground />
+      {content}
     </div>
   );
 }

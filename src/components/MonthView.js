@@ -25,14 +25,7 @@ function MonthView({ year, month, onBack, onSelectDay, onPrevMonth, onNextMonth 
         <button className="btn btn-nav" onClick={onNextMonth}>{'Suivant >'}</button>
       </div>
 
-      <div className="calendar-frame">
-        <svg className="calendar-scribble calendar-scribble-tl" viewBox="0 0 60 20" width="46" height="16" aria-hidden="true">
-          <path d="M2 14 Q10 2 18 12 T34 9 T50 13" stroke="var(--pencil-soft)" strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
-        <svg className="calendar-scribble calendar-scribble-br" viewBox="0 0 60 20" width="46" height="16" aria-hidden="true">
-          <path d="M2 14 Q10 2 18 12 T34 9 T50 13" stroke="var(--pencil-soft)" strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
-
+      <div className="hand-frame">
         <div className="calendar-grid">
           {DAY_NAMES.map((name) => (
             <div key={name} className="calendar-day-name">{name}</div>

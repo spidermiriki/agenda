@@ -11,20 +11,22 @@ function YearView({ year, onChangeYear, onSelectMonth }) {
         <button className="btn btn-nav" onClick={() => onChangeYear(1)}>{'Année suivante >'}</button>
       </div>
 
-      <div className="month-list">
-        {MONTH_NAMES.map((name, index) => {
-          const disabled = isBeforeStart(year, index);
-          return (
-            <button
-              key={name}
-              className="btn btn-month"
-              disabled={disabled}
-              onClick={() => onSelectMonth(index)}
-            >
-              {name}
-            </button>
-          );
-        })}
+      <div className="hand-frame">
+        <div className="month-list">
+          {MONTH_NAMES.map((name, index) => {
+            const disabled = isBeforeStart(year, index);
+            return (
+              <button
+                key={name}
+                className="btn btn-month"
+                disabled={disabled}
+                onClick={() => onSelectMonth(index)}
+              >
+                {name}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

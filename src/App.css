@@ -1,8 +1,129 @@
 .App {
+  position: relative;
+  z-index: 1;
   padding: 16px;
+  padding-bottom: 34vh;
   max-width: 640px;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+.garden-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.grass-ground {
+  fill: var(--grass);
+}
+
+.grass-blade {
+  fill: var(--grass);
+  stroke: var(--pencil-soft);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.grass-blade.sway {
+  transform-origin: 0px 0px;
+  animation-name: grass-sway;
+  animation-duration: 2.6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes grass-sway {
+  0%, 100% { transform: rotate(calc(var(--lean) - 5deg)); }
+  50% { transform: rotate(calc(var(--lean) + 5deg)); }
+}
+
+.flower-sway {
+  transform-origin: 0px 0px;
+  animation-name: flower-sway;
+  animation-duration: 3.4s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes flower-sway {
+  0%, 100% { transform: rotate(calc(var(--lean) - 3deg)); }
+  50% { transform: rotate(calc(var(--lean) + 3deg)); }
+}
+
+.flower-stem {
+  fill: none;
+  stroke: var(--pencil-soft);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.flower-petal {
+  stroke: var(--pencil);
+  stroke-width: 0.8;
+}
+
+.flower-center {
+  fill: #f6e2a8;
+  stroke: var(--pencil);
+  stroke-width: 1;
+}
+
+.sun-body {
+  fill: #f6cf5e;
+  stroke: var(--pencil);
+  stroke-width: 1.2;
+}
+
+.sun-rays {
+  transform-origin: 0px 0px;
+  animation: sun-spin 50s linear infinite;
+}
+
+.sun-ray {
+  stroke: #f6cf5e;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@keyframes sun-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.cloud-puff {
+  fill: #ffffff;
+  stroke: var(--pencil-soft);
+  stroke-width: 0.8;
+  opacity: 0.95;
+}
+
+.cloud-drift {
+  animation-name: cloud-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes cloud-drift {
+  0% { transform: translateX(-50px); }
+  100% { transform: translateX(410px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grass-blade.sway,
+  .flower-sway,
+  .sun-rays,
+  .cloud-drift {
+    animation: none;
+  }
+}
+
+.page {
+  position: relative;
+  z-index: 1;
 }
 
 .page-title {
@@ -81,61 +202,24 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  margin-top: 16px;
 }
 
 .btn-month:nth-child(odd) {
   border-radius: 225px 15px 255px 15px / 15px 255px 15px 225px;
 }
 
+/* --- Cadre autour de la grille du mois et de la liste des mois --- */
+
+.hand-frame {
+  margin-top: 18px;
+  padding: 16px 14px;
+  border: 2px solid var(--pencil);
+  border-radius: 6px;
+}
+
 /* --- Calendrier du mois --- */
 
-.calendar-frame {
-  position: relative;
-  margin-top: 18px;
-  padding: 16px 8px 12px;
-}
-
-.calendar-frame::before,
-.calendar-frame::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 2px solid var(--pencil);
-  border-radius: 30px 12px 26px 14px / 14px 26px 12px 30px;
-  pointer-events: none;
-}
-
-.calendar-frame::before {
-  transform: rotate(-0.5deg);
-}
-
-.calendar-frame::after {
-  transform: rotate(0.6deg) scale(1.008);
-  border-color: var(--pencil-soft);
-  opacity: 0.6;
-}
-
-.calendar-scribble {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0.7;
-  z-index: 1;
-}
-
-.calendar-scribble-tl {
-  top: -9px;
-  left: 14px;
-}
-
-.calendar-scribble-br {
-  bottom: -9px;
-  right: 14px;
-  transform: rotate(180deg);
-}
-
 .calendar-grid {
-  position: relative;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 3px;
@@ -305,6 +389,7 @@
 @media (min-width: 700px) {
   .App {
     padding: 32px;
+    padding-bottom: 34vh;
   }
 
   .page-title {
