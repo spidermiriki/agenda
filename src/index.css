@@ -1,31 +1,41 @@
 :root {
-  --paper: #fbf9f2;
-  --paper-alt: #f4f1e6;
-  --paper-line: #d7e4f0;
-  --pencil: #3f3f3f;
-  --pencil-soft: #6f6f6f;
-  --red-pencil: #c0554d;
-  --grass: #8bbf6b;
-  --flower-yellow: #e3b23c;
-  --flower-pink: #e08aa8;
+  /* Surfaces */
+  --bg: #080810;
+  --paper: #0f1018;
+  --paper-alt: #161624;
+  --paper-line: #1e1e38;
+
+  /* Texte */
+  --pencil: #c8d8c8;
+  --pencil-soft: #4a6050;
+
+  /* Accent principal — vert néon */
+  --primary: #00ff80;
+  --primary-dim: #00994d;
+  --primary-shadow: #003d20;
+
+  /* Danger */
+  --red-pencil: #ff4060;
+  --red-shadow: #500015;
 }
 
 body {
   margin: 0;
-  font-family: 'Patrick Hand', cursive;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
   color: var(--pencil);
-  background-color: var(--paper);
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent,
-    transparent 31px,
-    var(--paper-line) 32px
-  );
-  -webkit-font-smoothing: antialiased;
+  background-color: var(--bg);
+  -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: grayscale;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'VT323', monospace;
 }

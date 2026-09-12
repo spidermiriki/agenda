@@ -1,4 +1,5 @@
 import { MONTH_NAMES, START_YEAR, isBeforeStart } from '../dateUtils';
+import PixelScene from './PixelScene';
 
 function YearView({ year, onChangeYear, onSelectMonth }) {
   return (
@@ -11,6 +12,7 @@ function YearView({ year, onChangeYear, onSelectMonth }) {
         <button className="btn btn-nav" onClick={() => onChangeYear(1)}>{'Année suivante >'}</button>
       </div>
 
+      <PixelScene />
       <div className="hand-frame">
         <div className="month-list">
           {MONTH_NAMES.map((name, index) => {

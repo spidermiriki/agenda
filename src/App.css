@@ -1,194 +1,300 @@
+/* ============================================
+   AGENDA BOY — Pixel Electro Style
+   ============================================ */
+
+/* ---- Contenu de l'app (à l'intérieur de l'écran) ---- */
+
 .App {
   position: relative;
   z-index: 1;
-  padding: 16px;
-  padding-bottom: 34vh;
-  max-width: 640px;
-  margin: 0 auto;
+  padding: 12px;
   box-sizing: border-box;
 }
 
-.garden-bg {
+/* ---- Fond électro (derrière la console) ---- */
+
+.electro-bg {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
   z-index: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(0,255,128,0.03) 32px),
+    repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(0,255,128,0.03) 32px),
+    var(--bg);
+}
+
+.electro-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 3px);
   pointer-events: none;
 }
 
-.grass-ground {
-  fill: var(--grass);
-}
-
-.grass-blade {
-  fill: var(--grass);
-  stroke: var(--pencil-soft);
-  stroke-width: 0.6;
-  stroke-linejoin: round;
-}
-
-.grass-blade.sway {
-  transform-origin: 0px 0px;
-  animation-name: grass-sway;
-  animation-duration: 2.6s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-
-@keyframes grass-sway {
-  0%, 100% { transform: rotate(calc(var(--lean) - 5deg)); }
-  50% { transform: rotate(calc(var(--lean) + 5deg)); }
-}
-
-.flower-sway {
-  transform-origin: 0px 0px;
-  animation-name: flower-sway;
-  animation-duration: 3.4s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-
-@keyframes flower-sway {
-  0%, 100% { transform: rotate(calc(var(--lean) - 3deg)); }
-  50% { transform: rotate(calc(var(--lean) + 3deg)); }
-}
-
-.flower-stem {
-  fill: none;
-  stroke: var(--pencil-soft);
-  stroke-width: 1.2;
-  stroke-linecap: round;
-}
-
-.flower-petal {
-  stroke: var(--pencil);
-  stroke-width: 0.8;
-}
-
-.flower-center {
-  fill: #f6e2a8;
-  stroke: var(--pencil);
-  stroke-width: 1;
-}
-
-.sun-body {
-  fill: #f6cf5e;
-  stroke: var(--pencil);
-  stroke-width: 1.2;
-}
-
-.sun-rays {
-  transform-origin: 0px 0px;
-  animation: sun-spin 50s linear infinite;
-}
-
-.sun-ray {
-  stroke: #f6cf5e;
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-@keyframes sun-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.cloud-puff {
-  fill: #ffffff;
-  stroke: var(--pencil-soft);
-  stroke-width: 0.8;
-  opacity: 0.95;
-}
-
-.cloud-drift {
-  animation-name: cloud-drift;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-@keyframes cloud-drift {
-  0% { transform: translateX(-50px); }
-  100% { transform: translateX(410px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .grass-blade.sway,
-  .flower-sway,
-  .sun-rays,
-  .cloud-drift {
-    animation: none;
-  }
-}
-
-/* --- Animation d'entrée --- */
+/* ---- Écran de boot ---- */
 
 .intro-overlay {
   position: fixed;
   inset: 0;
-  z-index: 50;
-  background: var(--paper);
-  animation: intro-overlay-fade 0.7s ease-in forwards;
+  z-index: 100;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: intro-fade 0.4s ease-in forwards;
+  animation-delay: 3s;
+  pointer-events: none;
+}
+
+@keyframes intro-fade {
+  to { opacity: 0; visibility: hidden; }
+}
+
+.intro-boot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px 32px;
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 20px rgba(0,255,128,0.2), inset 0 0 20px rgba(0,255,128,0.04);
+}
+
+.intro-line {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--primary);
+  text-shadow: 0 0 8px var(--primary);
+  opacity: 0;
+  animation: intro-appear 0.05s step-start forwards;
+}
+
+.intro-line-1 { animation-delay: 0.3s; }
+.intro-line-2 { animation-delay: 1.0s; }
+.intro-line-3 { animation-delay: 1.7s; }
+.intro-line-4 { animation-delay: 2.4s; }
+
+@keyframes intro-appear { to { opacity: 1; } }
+
+.intro-cursor {
+  opacity: 0;
+  animation: cursor-blink 0.6s step-start infinite;
   animation-delay: 2.4s;
 }
 
-@keyframes intro-overlay-fade {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-.intro-sun-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.intro-sun-move {
-  animation: intro-sun-rise 1s ease-in-out forwards;
-  animation-delay: 1.5s;
-}
-
-@keyframes intro-sun-rise {
-  from { transform: translate(0px, 0px); }
-  to { transform: translate(36px, -44px); }
-}
-
-.intro-sun-circle {
-  fill: #f6cf5e;
-  fill-opacity: 0;
-  stroke: var(--pencil);
-  stroke-width: 1.4;
-  animation: intro-circle-draw 0.9s ease-in forwards, intro-circle-fill 0.5s ease-in forwards;
-  animation-delay: 0s, 0.7s;
-}
-
-@keyframes intro-circle-draw {
-  to { stroke-dashoffset: 0; }
-}
-
-@keyframes intro-circle-fill {
-  to { fill-opacity: 1; }
-}
-
-.intro-sun-ray {
-  stroke: #f6cf5e;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-dasharray: 5;
-  stroke-dashoffset: 5;
-  animation: intro-ray-draw 0.25s ease-out forwards;
-}
-
-@keyframes intro-ray-draw {
-  to { stroke-dashoffset: 0; }
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro-overlay {
-    display: none;
-  }
+  .intro-overlay { display: none; }
 }
+
+/* ============================================
+   COQUE GAME BOY
+   ============================================ */
+
+.gameboy-shell {
+  position: relative;
+  z-index: 1;
+  width: min(96vw, 440px);
+  margin: 20px 0;
+  background: linear-gradient(160deg, #282828 0%, #1c1c1c 55%, #161616 100%);
+  border-radius: 10px 10px 40px 40px;
+  padding: 16px 18px 26px;
+  border: 1px solid #333;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,0.07),
+    inset -1px -2px 0 rgba(0,0,0,0.5),
+    0 12px 40px rgba(0,0,0,0.85),
+    0 0 80px rgba(0,255,128,0.06);
+}
+
+/* ---- Bande header (logo + LED) ---- */
+
+.gameboy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.gameboy-logo {
+  font-size: 0.7rem;
+  color: #555;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.gameboy-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 6px var(--primary), 0 0 14px rgba(0,255,128,0.6);
+  flex-shrink: 0;
+}
+
+/* ---- Encadrement de l'écran ---- */
+
+.gameboy-screen-frame {
+  background: #080808;
+  border-radius: 6px 6px 4px 4px;
+  padding: 12px 12px 16px;
+  margin-bottom: 18px;
+  box-shadow:
+    inset 0 2px 10px rgba(0,0,0,0.95),
+    inset 0 -1px 0 rgba(255,255,255,0.03),
+    0 1px 0 rgba(255,255,255,0.04);
+  border: 1px solid #111;
+  /* Biseau décoratif en haut (style Game Boy) */
+  clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% 100%, 0% 100%, 0% 8px);
+}
+
+/* ---- Écran (zone scrollable) ---- */
+
+.gameboy-screen {
+  background: var(--bg);
+  height: clamp(230px, 50vh, 390px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #000;
+  box-shadow: 0 0 18px rgba(0,255,128,0.07), inset 0 0 20px rgba(0,0,0,0.4);
+}
+
+/* Scrollbar intégrée dans l'écran */
+.gameboy-screen::-webkit-scrollbar { width: 3px; }
+.gameboy-screen::-webkit-scrollbar-track { background: #050508; }
+.gameboy-screen::-webkit-scrollbar-thumb { background: var(--primary-dim); }
+
+/* ---- Rangée de commandes ---- */
+
+.gameboy-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  margin-bottom: 14px;
+}
+
+/* D-pad */
+
+.gameboy-dpad {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.dpad-h, .dpad-v {
+  position: absolute;
+  background: linear-gradient(180deg, #2e2e2e 0%, #222 100%);
+  border: 1px solid #111;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.dpad-h {
+  top: 33.3%; left: 0; right: 0;
+  height: 33.3%;
+  border-radius: 3px;
+}
+
+.dpad-v {
+  left: 33.3%; top: 0; bottom: 0;
+  width: 33.3%;
+  border-radius: 3px;
+}
+
+.dpad-center {
+  position: absolute;
+  top: 33.3%; left: 33.3%;
+  width: 33.3%; height: 33.3%;
+  background: #2a2a2a;
+  z-index: 1;
+}
+
+/* Boutons A / B */
+
+.gameboy-ab-area {
+  display: flex;
+  align-items: center;
+  padding-right: 6px;
+}
+
+.gameboy-ab-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: rotate(-12deg);
+}
+
+.gb-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-family: inherit;
+  color: rgba(255,255,255,0.45);
+  box-shadow: 0 3px 0 rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.gb-btn-b { background: linear-gradient(160deg, #6a2888, #4a1866); }
+.gb-btn-a { background: linear-gradient(160deg, #9a2244, #6a1430); }
+
+/* ---- Bas : SELECT / START + haut-parleur ---- */
+
+.gameboy-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 14px;
+}
+
+.gameboy-select-start {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.gb-sys-btn {
+  font-family: inherit;
+  font-size: 0.5rem;
+  color: #3a3a3a;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 4px 12px;
+  letter-spacing: 1px;
+  transform: rotate(-20deg);
+  display: block;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.5);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.gameboy-speaker {
+  display: grid;
+  grid-template-columns: repeat(6, 5px);
+  gap: 4px;
+}
+
+.speaker-dot {
+  width: 5px;
+  height: 5px;
+  background: #111;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 0 rgba(0,0,0,0.8);
+}
+
+/* ============================================
+   CONTENU — Pages & Composants
+   ============================================ */
 
 .page {
   position: relative;
@@ -196,119 +302,151 @@
 }
 
 .page-title {
-  font-size: 1.6rem;
-  margin: 4px 0 16px;
+  font-size: 1.8rem;
+  margin: 4px 0 12px;
   display: inline-block;
-  border-bottom: 3px solid var(--pencil);
+  color: var(--primary);
+  text-shadow: 0 0 10px var(--primary), 0 0 24px rgba(0,255,128,0.3);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  border-bottom: 2px solid var(--primary);
   padding-bottom: 2px;
-  text-transform: capitalize;
 }
 
-/* --- Boutons façon crayon --- */
+/* ---- Boutons style pixel ---- */
 
 .btn {
   font-family: inherit;
-  font-size: 1rem;
-  color: var(--pencil);
+  font-size: 0.95rem;
+  color: var(--primary);
   background: var(--paper);
-  border: 2px solid var(--pencil);
-  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-  box-shadow: 2px 2px 0 rgba(63, 63, 63, 0.25);
-  padding: 8px 14px;
+  border: 2px solid var(--primary);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 var(--primary-shadow);
+  padding: 6px 12px;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background 0.08s, color 0.08s, transform 0.08s, box-shadow 0.08s;
 }
 
 .btn:hover:not(:disabled) {
-  transform: translateY(-1px) rotate(-0.5deg);
+  background: var(--primary);
+  color: var(--bg);
+  transform: translate(3px, 3px);
+  box-shadow: none;
 }
 
 .btn:active:not(:disabled) {
-  transform: translateY(1px);
-  box-shadow: 1px 1px 0 rgba(63, 63, 63, 0.25);
+  transform: translate(3px, 3px);
+  box-shadow: none;
 }
 
 .btn:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
   box-shadow: none;
 }
 
 .btn-back {
-  margin-bottom: 12px;
-  font-size: 0.9rem;
-  padding: 6px 10px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  color: var(--pencil-soft);
+  border-color: var(--pencil-soft);
+  box-shadow: 2px 2px 0 #1a2a1a;
+}
+
+.btn-back:hover:not(:disabled) {
+  background: var(--pencil-soft);
+  color: var(--bg);
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .btn-remove {
-  font-size: 0.85rem;
-  padding: 4px 8px;
+  font-size: 0.75rem;
+  padding: 3px 7px;
   color: var(--red-pencil);
   border-color: var(--red-pencil);
+  box-shadow: 2px 2px 0 var(--red-shadow);
   flex-shrink: 0;
 }
 
-.btn-add {
-  align-self: flex-start;
+.btn-remove:hover:not(:disabled) {
+  background: var(--red-pencil);
+  color: var(--bg);
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
-/* --- Année / liste des mois --- */
+.btn-add { align-self: flex-start; }
+
+/* ---- Navigation ---- */
 
 .row-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .btn-nav {
-  font-size: 0.85rem;
-  padding: 6px 10px;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  color: var(--pencil-soft);
+  border-color: var(--pencil-soft);
+  box-shadow: 2px 2px 0 #1a2a1a;
+}
+
+.btn-nav:hover:not(:disabled) {
+  background: var(--pencil-soft);
+  color: var(--bg);
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .month-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 6px;
 }
 
-.btn-month:nth-child(odd) {
-  border-radius: 225px 15px 255px 15px / 15px 255px 15px 225px;
-}
+.btn-month { border-radius: 0; }
 
-/* --- Cadre autour de la grille du mois et de la liste des mois --- */
+/* ---- Cadre ---- */
 
 .hand-frame {
-  margin-top: 18px;
-  padding: 16px 14px;
-  border: 2px solid var(--pencil);
-  border-radius: 6px;
+  margin-top: 12px;
+  padding: 10px 8px;
+  border: 2px solid var(--paper-line);
+  background: var(--paper);
 }
 
-/* --- Calendrier du mois --- */
+/* ---- Calendrier mensuel ---- */
 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+  gap: 2px;
 }
 
 .calendar-day-name {
   text-align: center;
-  font-size: 0.75rem;
-  color: var(--pencil-soft);
+  font-size: 0.7rem;
+  color: var(--primary-dim);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   padding-bottom: 4px;
 }
 
 .calendar-cell {
-  border: 1.5px solid var(--pencil-soft);
-  border-radius: 60% 15% 55% 20% / 15% 55% 20% 60%;
+  border: 1px solid var(--paper-line);
   background: var(--paper);
-  padding: 4px 2px;
+  padding: 3px 1px;
   text-align: center;
+  border-radius: 0;
 }
 
 .calendar-cell-empty {
@@ -318,77 +456,85 @@
 
 .day-number {
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--pencil);
   background: none;
   border: none;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
   padding: 0;
+  transition: color 0.08s;
+}
+
+.day-number:hover {
+  color: var(--primary);
+  text-shadow: 0 0 6px var(--primary);
 }
 
 .day-number-today {
-  border: 2px solid var(--red-pencil);
-  border-radius: 50%;
+  color: var(--primary);
+  text-shadow: 0 0 8px var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 0;
+  box-shadow: 0 0 8px rgba(0,255,128,0.2);
 }
 
 .calendar-dots {
   display: flex;
   justify-content: center;
-  gap: 3px;
-  margin-top: 2px;
-  min-height: 8px;
+  gap: 2px;
+  margin-top: 1px;
+  min-height: 6px;
 }
 
 .calendar-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.25);
+  width: 5px;
+  height: 5px;
+  border-radius: 0;
   display: inline-block;
 }
 
-/* --- Détail d'un jour --- */
+/* ---- Détail d'un jour ---- */
 
 .events-list {
   list-style: none;
   padding: 0;
-  margin: 16px 0;
+  margin: 10px 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .event-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  border: 1.5px solid var(--pencil-soft);
-  border-left: 5px solid var(--pencil-soft);
-  border-radius: 12px 6px 12px 6px / 6px 12px 6px 12px;
+  gap: 8px;
+  border: 1px solid var(--paper-line);
+  border-left: 4px solid var(--pencil-soft);
+  border-radius: 0;
   background: var(--paper);
-  padding: 8px 10px;
+  padding: 6px 8px;
 }
 
 .event-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .event-actions {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   flex-shrink: 0;
 }
 
 .btn-edit {
-  font-size: 0.85rem;
-  padding: 4px 8px;
+  font-size: 0.75rem;
+  padding: 3px 7px;
 }
 
 .event-meta {
@@ -396,193 +542,177 @@
   color: var(--pencil-soft);
 }
 
-/* --- Formulaire d'ajout d'événement --- */
+/* ---- Formulaire d'ajout ---- */
 
 .event-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 16px;
-  padding: 14px;
-  border: 2px dashed var(--pencil-soft);
-  border-radius: 20px 8px 20px 8px / 8px 20px 8px 20px;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 2px solid var(--paper-line);
+  border-radius: 0;
   background: var(--paper-alt);
 }
 
 .event-form input[type='text'],
 .event-form input[type='time'] {
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--pencil);
   background: transparent;
   border: none;
-  border-bottom: 2px solid var(--pencil);
-  padding: 6px 2px;
+  border-bottom: 2px solid var(--paper-line);
+  padding: 4px 2px;
   box-sizing: border-box;
 }
 
-.event-form input[type='text'] {
-  width: 100%;
-}
+.event-form input[type='text'] { width: 100%; }
 
 .event-form input:focus {
   outline: none;
-  border-bottom-color: var(--red-pencil);
+  border-bottom-color: var(--primary);
+  color: var(--primary);
+  text-shadow: 0 0 6px rgba(0,255,128,0.4);
 }
 
 .field-group {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .field-label {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--pencil-soft);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .radio-label {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  accent-color: var(--pencil);
+  accent-color: var(--primary);
 }
 
 .time-inputs {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 
-/* --- Écrans plus larges --- */
+/* ---- Scène pixel ---- */
 
-@media (min-width: 700px) {
-  .App {
-    padding: 32px;
-    padding-bottom: 34vh;
-  }
-
-  .page-title {
-    font-size: 2.2rem;
-  }
-
-  .month-list {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .calendar-cell {
-    padding: 10px 4px;
-  }
-
-  .day-number {
-    width: 34px;
-    height: 34px;
-    line-height: 34px;
-    font-size: 1.15rem;
-  }
+.pixel-scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  border: 2px solid var(--paper-line);
+  border-bottom: none;
 }
 
-/* --- Tags --- */
+/* ---- Tags ---- */
 
 .tag-selector {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
   align-items: center;
 }
 
 .tag-chip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   font-family: inherit;
-  font-size: 0.85rem;
-  color: var(--pencil);
+  font-size: 0.8rem;
+  color: var(--pencil-soft);
   background: var(--paper);
-  border: 1.5px solid var(--pencil-soft);
-  border-radius: 99px;
-  padding: 4px 10px;
+  border: 1px solid var(--paper-line);
+  border-radius: 0;
+  padding: 3px 8px;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: border-color 0.08s, color 0.08s;
 }
 
 .tag-chip-selected {
-  border-color: var(--pencil);
-  box-shadow: 1px 1px 0 rgba(63, 63, 63, 0.2);
-  background: var(--paper-alt);
+  border-color: var(--primary);
+  color: var(--primary);
+  text-shadow: 0 0 6px rgba(0,255,128,0.3);
 }
 
 .tag-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 0;
   display: inline-block;
   flex-shrink: 0;
-  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .btn-new-tag {
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--pencil-soft);
   background: none;
-  border: 1.5px dashed var(--pencil-soft);
-  border-radius: 99px;
-  padding: 4px 10px;
+  border: 1px dashed var(--paper-line);
+  border-radius: 0;
+  padding: 3px 8px;
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.08s, border-color 0.08s;
 }
 
 .btn-new-tag:hover {
-  color: var(--pencil);
-  border-color: var(--pencil);
+  color: var(--primary);
+  border-color: var(--primary);
 }
-
-/* Formulaire de création de tag */
 
 .new-tag-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 12px;
-  border: 1.5px dashed var(--pencil-soft);
-  border-radius: 12px;
+  gap: 8px;
+  padding: 10px;
+  border: 1px dashed var(--paper-line);
+  border-radius: 0;
   background: var(--paper);
 }
 
-.rgb-picker {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.rgb-picker { display: flex; flex-direction: column; gap: 6px; }
 
 .color-preview-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .color-preview {
-  width: 40px;
-  height: 28px;
-  border-radius: 6px;
-  border: 1.5px solid var(--pencil-soft);
+  width: 36px;
+  height: 22px;
+  border-radius: 0;
+  border: 1px solid var(--paper-line);
   flex-shrink: 0;
 }
 
 .color-hex {
   font-size: 0.85rem;
   color: var(--pencil-soft);
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .rgb-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .rgb-label {
@@ -593,55 +723,52 @@
   flex-shrink: 0;
 }
 
-.rgb-slider {
-  flex: 1;
-  cursor: pointer;
-  height: 4px;
-}
+.rgb-slider { flex: 1; cursor: pointer; height: 4px; }
 
 .rgb-number {
-  width: 46px;
+  width: 42px;
   font-family: inherit;
   font-size: 0.85rem;
   color: var(--pencil);
   background: transparent;
   border: none;
-  border-bottom: 1.5px solid var(--pencil-soft);
+  border-bottom: 1px solid var(--paper-line);
   text-align: center;
   padding: 2px 0;
 }
 
 .rgb-number:focus {
   outline: none;
-  border-bottom-color: var(--pencil);
+  border-bottom-color: var(--primary);
+  color: var(--primary);
 }
-
-/* Section gestion des tags existants */
 
 .tag-manager {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 20px;
-  padding-top: 14px;
-  border-top: 1.5px dashed var(--pencil-soft);
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--paper-line);
 }
 
 .tag-manage {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
 }
 
 .tag-manage-item {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 0.85rem;
-  padding: 3px 8px 3px 6px;
-  border-radius: 99px;
-  border: 1.5px solid var(--pencil-soft);
+  gap: 4px;
+  font-size: 0.8rem;
+  padding: 2px 7px 2px 5px;
+  border-radius: 0;
+  border: 1px solid var(--paper-line);
   background: var(--paper);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .btn-delete-tag {
@@ -649,12 +776,10 @@
   border: none;
   color: var(--pencil-soft);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   line-height: 1;
   padding: 0 1px;
-  transition: color 0.15s;
+  transition: color 0.08s;
 }
 
-.btn-delete-tag:hover {
-  color: var(--red-pencil);
-}
+.btn-delete-tag:hover { color: var(--red-pencil); }
