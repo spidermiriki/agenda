@@ -6,6 +6,7 @@ import DayDetail from './components/DayDetail';
 import GardenBackground from './components/GardenBackground';
 import IntroOverlay from './components/IntroOverlay';
 import { START_YEAR, shiftMonth } from './dateUtils';
+import { TagsProvider } from './TagsContext';
 
 function App() {
   const [year, setYear] = useState(START_YEAR);
@@ -43,11 +44,13 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <GardenBackground />
-      {content}
-      <IntroOverlay />
-    </div>
+    <TagsProvider>
+      <div className="App">
+        <GardenBackground />
+        {content}
+        <IntroOverlay />
+      </div>
+    </TagsProvider>
   );
 }
 
