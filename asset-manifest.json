@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/agenda/static/css/main.ed925c47.css",
+    "main.js": "/agenda/static/js/main.988343ee.js",
+    "static/js/453.c46fd08d.chunk.js": "/agenda/static/js/453.c46fd08d.chunk.js",
+    "index.html": "/agenda/index.html",
+    "main.ed925c47.css.map": "/agenda/static/css/main.ed925c47.css.map",
+    "main.988343ee.js.map": "/agenda/static/js/main.988343ee.js.map",
+    "453.c46fd08d.chunk.js.map": "/agenda/static/js/453.c46fd08d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ed925c47.css",
+    "static/js/main.988343ee.js"
+  ]
+}
